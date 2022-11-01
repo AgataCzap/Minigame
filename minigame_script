@@ -1,0 +1,173 @@
+import random
+import requests
+selection = []
+print("Welcome to Superhero Top Trumps! \n")
+user_number = int(input('How many times would you like to play? '))
+
+def multiple_superheroes():
+    print("\nChoose your superhero! \n")
+    for i in range(0, 6):
+        superhero_id = random.randint(0, 731)
+        selection.append(superhero_id)
+        url = 'https://superheroapi.com/api/3533601446649893/{}/'.format(superhero_id)
+        response = requests.get(url)
+        superhero = response.json()
+        hero_id = superhero["id"]
+        name = superhero["name"]
+        print("{}: {}".format(hero_id, name))
+
+
+
+def chosen_superhero():
+    choice = int(input("\nEnter ID of chosen superhero: "))
+    url = 'https://superheroapi.com/api/3533601446649893/{}/'.format(choice)
+    response = requests.get(url)
+    superhero = response.json()
+    if choice in selection:
+        new_superhero = choice
+        url = 'https://superheroapi.com/api/3533601446649893/{}/'.format(new_superhero)
+        response = requests.get(url)
+        superhero = response.json()
+        print("\nYou have chosen: {}!".format(superhero['name']))
+        return {
+            'name': superhero['name'],
+            'id': superhero['id'],
+            'aliases': superhero['biography']['aliases'],
+            'alignment': superhero['biography']['alignment'],
+            'occupation': superhero['work']['occupation'],
+            'base': superhero['work']['base'],
+            'gender': superhero['appearance']['gender'],
+            'race': superhero['appearance']['race'],
+            'affiliation': superhero['connections']['group-affiliation'],
+            'publisher': superhero['biography']['publisher'],
+            'intelligence': superhero['powerstats']['intelligence'],
+            'strength': superhero['powerstats']['strength'],
+            'speed': superhero['powerstats']['speed'],
+            'durability': superhero['powerstats']['durability'],
+            'power': superhero['powerstats']['power'],
+            'combat': superhero['powerstats']['combat']
+        }
+    else:
+         second_choice = int(input("\nPlease Enter ID of chosen superhero again: "))
+         url2 = 'https://superheroapi.com/api/3533601446649893/{}/'.format(second_choice)
+         response2 = requests.get(url2)
+         superhero2 = response2.json()
+    print("\nYou have chosen: {}!".format(superhero2['name']))
+    return {
+        'name': superhero['name'],
+        'id': superhero['id'],
+        'aliases': superhero['biography']['aliases'],
+        'alignment': superhero['biography']['alignment'],
+        'occupation': superhero['work']['occupation'],
+        'base': superhero['work']['base'],
+        'gender': superhero['appearance']['gender'],
+        'race': superhero['appearance']['race'],
+        'affiliation': superhero['connections']['group-affiliation'],
+        'publisher': superhero['biography']['publisher'],
+        'intelligence': superhero['powerstats']['intelligence'],
+        'strength': superhero['powerstats']['strength'],
+        'speed': superhero['powerstats']['speed'],
+        'durability': superhero['powerstats']['durability'],
+        'power': superhero['powerstats']['power'],
+        'combat': superhero['powerstats']['combat']
+    }
+
+
+def random_superhero():
+    superhero_id = random.randint(1, 731)
+    url = 'https://superheroapi.com/api/3533601446649893/{}/'.format(superhero_id)
+    response = requests.get(url)
+    superhero = response.json()
+    return {
+        'name': superhero['name'],
+        'id': superhero['id'],
+        'aliases': superhero['biography']['aliases'],
+        'alignment': superhero['biography']['alignment'],
+        'occupation': superhero['work']['occupation'],
+        'base': superhero['work']['base'],
+        'gender': superhero['appearance']['gender'],
+        'race': superhero['appearance']['race'],
+        'affiliation': superhero['connections']['group-affiliation'],
+        'publisher': superhero['biography']['publisher'],
+        'intelligence': superhero['powerstats']['intelligence'],
+        'strength': superhero['powerstats']['strength'],
+        'speed': superhero['powerstats']['speed'],
+        'durability': superhero['powerstats']['durability'],
+        'power': superhero['powerstats']['power'],
+        'combat': superhero['powerstats']['combat']
+    }
+
+def run():
+    multiple_superheroes()
+    my_superhero = chosen_superhero()
+    print('Also known as: {}'.format(my_superhero['aliases']))
+    print('The alignment of your chosen superhero: {}'.format(my_superhero['alignment']))
+    print('Gender: {}'.format(my_superhero['gender']))
+    print('Race: {}'.format(my_superhero['race']))
+    print('Occupation: {}'.format(my_superhero['occupation']))
+    print('Base of operation: {}'.format(my_superhero['base']))
+    print('Affiliations: {}'.format(my_superhero['affiliation']))
+    print('Published by: {}'.format(my_superhero['publisher']))
+    print('Powerstats of your chosen superhero')
+    print('intelligence: {}'.format(my_superhero['intelligence']))
+    print('strength: {}'.format(my_superhero['strength']))
+    print('speed: {}'.format(my_superhero['speed']))
+    print('durability: {}'.format(my_superhero['durability']))
+    print('power: {}'.format(my_superhero['power']))
+    print('combat: {}'.format(my_superhero['combat']))
+    stat_choice = input('\nWhich stat do you want to use? (intelligence, strength, speed, durability, power, combat) ')
+    stat_choice = stat_choice.lower()
+    powerstats = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat']
+    # dealing with typos in the user input for the stat of choice
+    if stat_choice in powerstats:
+        print("Your powerstat: {}\n".format(stat_choice))
+    else:
+        # fixed the issue with code being re-run, instead I allowed the user to input stat of choice again
+        stat_choice = input(
+            'Not found on the list! Please pick another powerstat! (intelligence, strength, speed, durability, power, '
+            'combat) ')
+    opponent_superhero = random_superhero()
+    if my_superhero is opponent_superhero:
+        random_superhero()
+    print('The opponent was given {}'.format(opponent_superhero['name']))
+    print('Also known as: {}'.format(opponent_superhero['aliases']))
+    # biography of your opponent, so that you can see what kind of a hero you are up against
+    opponent_alignment = opponent_superhero['alignment']
+    print('Opponent alignment: {}'.format(opponent_alignment))
+    print('Gender: {}'.format(opponent_superhero['gender']))
+    print('Race: {}'.format(opponent_superhero['race']))
+    print('Occupation: {}'.format(opponent_superhero['occupation']))
+    print('Base of operation: {}'.format(opponent_superhero['base']))
+    print('Affiliations: {}'.format(opponent_superhero['affiliation']))
+    print('Published by: {}\n'.format(opponent_superhero['publisher']))
+    my_stat = my_superhero[stat_choice]
+    opponent_stat = opponent_superhero[stat_choice]
+    # if character stats are 'null', set the stats to 0, so that we can mathematically compare
+    if my_stat == 'null':
+        my_stat = 0
+    else:
+        my_stat = my_stat
+    if opponent_stat == 'null':
+        opponent_stat = 0
+    else:
+        opponent_stat = opponent_stat
+    if int(my_stat) < int(opponent_stat):
+        print('You Lose!')
+    elif int(my_stat) > int(opponent_stat):
+        print('You Win!')
+    else:
+        print('Draw!')
+    print('Your stats: {}'.format(my_stat))
+    print('Opponent stats: {}'.format(opponent_stat))
+
+# running code multiple times so that you can play more than once:
+def multiple_runs():
+    for number in range(user_number):
+        output = run()
+        print(output)
+
+multiple_runs()
+
+#should have made if statements for typos and wrong ID as wild statements so that they loop forever
+#otherwise if you mistype again you get error
+#go back to these questions and see if you can new tools to solve them
